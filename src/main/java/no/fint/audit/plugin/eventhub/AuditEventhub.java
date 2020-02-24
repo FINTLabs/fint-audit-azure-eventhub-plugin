@@ -1,0 +1,38 @@
+package no.fint.audit.plugin.eventhub;
+
+import lombok.extern.slf4j.Slf4j;
+import no.fint.audit.FintAuditService;
+import no.fint.event.model.Event;
+import no.fint.event.model.Status;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collections;
+
+@Slf4j
+public class AuditEventhub implements FintAuditService {
+
+    @Autowired
+    private AuditEventhubWorker auditEventhubWorker;
+
+    @Override
+    public void audit(Event event, Status... statuses) {
+        for (Status status : statuses) {
+            Event copy = new Event();
+            BeanUtils.copyProperties(event, copy);
+            copy.setStatus(status);
+            auditEventhubWorker.audit(copy);
+        }
+        event.setStatus(statuses[statuses.length - 1]);
+    }
+
+    @Override
+    public void audit(Event event, boolean clearData) {
+        Event copy = new Event();
+        BeanUtils.copyProperties(event, copy);
+        if (clearData) {
+            copy.setData(Collections.emptyList());
+        }
+        auditEventhubWorker.audit(copy);
+    }
+}
