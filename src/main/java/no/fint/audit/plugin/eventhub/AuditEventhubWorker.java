@@ -6,7 +6,7 @@ import com.azure.messaging.eventhubs.EventHubProducerClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.event.model.Event;
+import no.fint.audit.model.AuditEvent;
 import no.twingine.CircularBuffer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,9 +67,9 @@ public class AuditEventhubWorker {
         }
     }
 
-    public void audit(Event event) {
+    public void audit(AuditEvent auditEvent) {
         try {
-            buffer.add(objectMapper.writeValueAsString(event));
+            buffer.add(objectMapper.writeValueAsString(auditEvent));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

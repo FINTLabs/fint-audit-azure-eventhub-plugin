@@ -2,12 +2,11 @@ package no.fint.audit.plugin.eventhub;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.audit.FintAuditService;
+import no.fint.audit.model.AuditEvent;
 import no.fint.event.model.Event;
 import no.fint.event.model.Status;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Collections;
 
 @Slf4j
 public class AuditEventhub implements FintAuditService {
@@ -21,7 +20,7 @@ public class AuditEventhub implements FintAuditService {
             Event copy = new Event();
             BeanUtils.copyProperties(event, copy);
             copy.setStatus(status);
-            auditEventhubWorker.audit(copy);
+            auditEventhubWorker.audit(new AuditEvent(copy));
         }
         event.setStatus(statuses[statuses.length - 1]);
     }
@@ -30,9 +29,6 @@ public class AuditEventhub implements FintAuditService {
     public void audit(Event event, boolean clearData) {
         Event copy = new Event();
         BeanUtils.copyProperties(event, copy);
-        if (clearData) {
-            copy.setData(Collections.emptyList());
-        }
-        auditEventhubWorker.audit(copy);
+        auditEventhubWorker.audit(new AuditEvent(copy, clearData));
     }
 }
