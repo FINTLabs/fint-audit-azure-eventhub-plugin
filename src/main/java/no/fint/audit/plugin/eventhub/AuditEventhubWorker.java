@@ -36,7 +36,7 @@ public class AuditEventhubWorker {
     @Value("${fint.audit.test-mode:false}")
     private boolean testMode;
 
-    private CircularBuffer<String> buffer;
+    private CircularBuffer<byte[]> buffer;
 
     private AtomicLong index;
 
@@ -53,12 +53,18 @@ public class AuditEventhubWorker {
     }
 
     public void save() {
-        long count = 0;
+        int count = 0;
         try {
-            EventDataBatch batch = eventHubProducerClient.createBatch();
-            count = buffer.drain(index).stream().map(EventData::new).peek(batch::tryAdd).count();
-            eventHubProducerClient.send(batch);
-            log.debug("Sent a batch of {} events", count);
+            byte[] message = buffer.take(index);
+            while (message != null) {
+                EventDataBatch batch = eventHubProducerClient.createBatch();
+                while (message != null && batch.tryAdd(new EventData(message))) {
+                    message = buffer.take(index);
+                }
+                count = batch.getCount();
+                eventHubProducerClient.send(batch);
+                log.debug("Sent a batch of {} events", count);
+            }
         } catch (BufferOverflowException e) {
             log.warn("Audit event buffer overflow, losing at least {} events!", bufferSize);
         } catch (Exception e) {
@@ -69,7 +75,7 @@ public class AuditEventhubWorker {
 
     public void audit(AuditEvent auditEvent) {
         try {
-            buffer.add(objectMapper.writeValueAsString(auditEvent));
+            buffer.add(objectMapper.writeValueAsBytes(auditEvent));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

@@ -10,7 +10,7 @@ import spock.lang.Specification
 
 @SpringBootTest(classes = FintAuditConfig)
 @ActiveProfiles('test')
-class EventHubSendSpec extends Specification {
+class EventHubSendIntegrationSpec extends Specification {
     @Autowired
     FintAuditService fintAuditService
     @Autowired
