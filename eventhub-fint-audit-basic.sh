@@ -5,14 +5,14 @@ REGION=westeurope
 GROUP=fint-audit
 NAMESPACE=fint-audit-basic
 SKU=Basic
-NAME=fint-audit-alpha
+NAME=fint-audit-beta
 
 echo "Creating namespace ${NAMESPACE} ..."
 #az eventhubs namespace create --name ${NAMESPACE} --resource-group ${GROUP} --sku ${SKU} --location ${REGION} \
 #  --output table
 
 echo "Creating hub ${NAME} ..."
-az eventhubs eventhub create --name ${NAME} --message-retention 1 \
+az eventhubs eventhub create --name ${NAME} --message-retention 1 --partition-count 16 \
   --resource-group ${GROUP} --namespace-name ${NAMESPACE} --output table
 
 echo "Creating Send rule ..."
