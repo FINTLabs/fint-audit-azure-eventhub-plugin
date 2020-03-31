@@ -3,16 +3,17 @@
 set -e
 REGION=westeurope
 GROUP=fint-audit
-NAMESPACE=fint-audit-basic
+NAMESPACE=fint-audit-api
 SKU=Basic
-NAME=fint-audit-beta
+NAME=fint-audit-api
+PART=32
 
 echo "Creating namespace ${NAMESPACE} ..."
-#az eventhubs namespace create --name ${NAMESPACE} --resource-group ${GROUP} --sku ${SKU} --location ${REGION} \
-#  --output table
+az eventhubs namespace create --name ${NAMESPACE} --resource-group ${GROUP} --sku ${SKU} --location ${REGION} \
+  --output table
 
 echo "Creating hub ${NAME} ..."
-az eventhubs eventhub create --name ${NAME} --message-retention 1 --partition-count 16 \
+az eventhubs eventhub create --name ${NAME} --message-retention 1 --partition-count ${PART} \
   --resource-group ${GROUP} --namespace-name ${NAMESPACE} --output table
 
 echo "Creating Send rule ..."
