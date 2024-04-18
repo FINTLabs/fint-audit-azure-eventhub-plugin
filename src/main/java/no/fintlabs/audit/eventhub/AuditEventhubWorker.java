@@ -1,4 +1,4 @@
-package no.fint.audit.plugin.eventhub;
+package no.fintlabs.audit.eventhub;
 
 import com.azure.messaging.eventhubs.EventData;
 import com.azure.messaging.eventhubs.EventDataBatch;

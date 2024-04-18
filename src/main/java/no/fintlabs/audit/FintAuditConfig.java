@@ -1,4 +1,4 @@
-package no.fint.audit;
+package no.fintlabs.audit;
 
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
@@ -6,8 +6,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.audit.plugin.eventhub.AuditEventhub;
-import no.fint.audit.plugin.eventhub.AuditEventhubWorker;
+import no.fint.audit.FintAuditService;
+import no.fintlabs.audit.eventhub.AuditEventhub;
+import no.fintlabs.audit.eventhub.AuditEventhubWorker;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
