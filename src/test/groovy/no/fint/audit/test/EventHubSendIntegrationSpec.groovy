@@ -1,6 +1,6 @@
-import no.fint.audit.FintAuditConfig
+import no.fintlabs.audit.FintAuditConfig
 import no.fint.audit.FintAuditService
-import no.fint.audit.plugin.eventhub.AuditEventhubWorker
+import no.fintlabs.audit.eventhub.AuditEventhubWorker
 import no.fint.event.model.Event
 import no.fint.event.model.Status
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,9 +12,9 @@ import spock.lang.Specification
 @ActiveProfiles('test')
 class EventHubSendIntegrationSpec extends Specification {
     @Autowired
-    FintAuditService fintAuditService
+    private FintAuditService fintAuditService
     @Autowired
-    AuditEventhubWorker auditEventhubWorker
+    private AuditEventhubWorker auditEventhubWorker
 
     def 'Send some events'() {
         given:
