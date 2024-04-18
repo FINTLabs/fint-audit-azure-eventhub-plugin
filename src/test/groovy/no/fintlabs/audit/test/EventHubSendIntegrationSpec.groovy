@@ -1,3 +1,5 @@
+package no.fintlabs.audit.test
+
 import no.fintlabs.audit.FintAuditConfig
 import no.fint.audit.FintAuditService
 import no.fintlabs.audit.eventhub.AuditEventhubWorker
